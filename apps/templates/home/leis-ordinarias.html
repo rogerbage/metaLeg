@@ -1,0 +1,289 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+
+{% if request.user.is_authenticated %}
+    <div class="row">
+
+      <div class="col-12">
+        <div class="card card-chart" id="div_big_chart">
+          <div class="card-header ">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category">São as leis típicas, ou as mais comuns, aprovadas pela maioria dos parlamentares da Câmara dos Deputados e do Senado Federal presentes durante a votação.</h5>
+                <h2 class="card-title">Leis Ordinárias</h2>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Pesquisar Termo</label>
+                  <span class="input-group-text text-body form-control">
+                   <div id="search_loading" class="lds-dual-ring"></div>
+                    <input id="search_input" type="text" style="border: none;" class="form-control" placeholder="Pesquisar Termo" value="{{search}}">
+                    <i id="search_icon" style="cursor: pointer;" class="fas fa-search" aria-hidden="true"></i>
+                  </span>
+                  
+                </div>
+                <div class="btn-group btn-group-toggle float-left" data-toggle="buttons">
+                  <label class="btn btn-sm btn-primary btn-simple active" id="1851_2023">
+                    <input type="radio" id="1851_2023_checked" name="options" checked style="display: none;">
+                    <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Todos</span>
+                    <span class="d-block d-sm-none">
+                      <i class="tim-icons icon-single-02"></i>
+                    </span>
+                  </label>
+                  <label class="btn btn-sm btn-primary btn-simple" id="1851_1988">
+                    <input type="radio" class="d-none d-sm-none" name="options" style="display: none;">
+                    <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">1891 - 1988</span>
+                    <span class="d-block d-sm-none">
+                      <i class="tim-icons icon-gift-2"></i>
+                    </span>
+                  </label>
+                  <label class="btn btn-sm btn-primary btn-simple" id="1989_2023">
+                    <input type="radio" class="d-none" name="options" style="display: none;">
+                    <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">1989 - 2023</span>
+                    <span class="d-block d-sm-none">
+                      <i class="tim-icons icon-tap-02"></i>
+                    </span>
+                  </label>
+                </div>
+                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                  <label class="btn btn-sm btn-primary btn-simple active" onclick="ferramentas.exportDivAsImage('div_big_chart', 'lei_ordinaria_todos_anos_' + ultimaBusca)" id="btn_download_big_chart">
+                    <i class="tim-icons icon-cloud-download-93"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="chartBig1"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card card-chart" id="div_top_five_chart">
+          <div class="card-header">
+            <h5 class="card-category">Leis Ordinárias: Os 5 anos com maiores ocorrencias do termo: <span class="text-success" id="inputTopFiveTerm">{{search}}</span></h5>
+            <h3 class="card-title">Top 5 <a href="#" onclick="ferramentas.exportDivAsImage('div_top_five_chart', 'lei_ordinaria_top_five_' + ultimaBusca)" style="float: right;"><i class="tim-icons icon-cloud-download-93"></i></a> </h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="Top5Chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card card-chart" id="div_top_year_chart">
+          <div class="card-header">
+            <h5 class="card-category">Leis Ordinárias: Pico de ocorrencias do termo: <span class="text-success" id="inputTopYearTerm">{{search}}</span></h5>
+            <h3 class="card-title"><span id="topYearSpan"> Pico </span> <a href="#" onclick="ferramentas.exportDivAsImage('div_top_year_chart', 'lei_ordinaria_pico_' + ultimaBusca)" style="float: right;"><i class="tim-icons icon-cloud-download-93"></i></a></h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="topYearCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+      <div class="col-lg-4">
+        <div class="card card-chart" id="div_first_five_chart">
+          <div class="card-header">
+            <h5 class="card-category">Leis Ordinárias: Primeiros 5 anos com a ocorrencias do termo: <span class="text-success" id="inputFirstFiveTerm">{{search}}</span></h5>
+            <h3 class="card-title">Primeiros 5 <a href="#" onclick="ferramentas.exportDivAsImage('div_first_five_chart', 'lei_ordinaria_primeiros_cinco_' + ultimaBusca)" style="float: right;"><i class="tim-icons icon-cloud-download-93"></i></a></h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="firstFiveChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+
+      <div class="col-lg-6 col-md-12">
+        <div class="card card-tasks">
+          <div class="card-header ">
+            <h6 class="title d-inline">Total de Leis Ordinárias com o termo "<span class="text-success" id="d_total_search"></span>": <span id="d_total"></span></h6>
+            <!-- <div class="dropdown">
+              <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">
+                <i class="tim-icons icon-settings-gear-63"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#pablo">Action</a>
+                <a class="dropdown-item" href="#pablo">Another action</a>
+                <a class="dropdown-item" href="#pablo">Something else</a>
+              </div>
+            </div> -->
+          </div>
+          <div class="card-body ">
+            <div class="table-full-width table-responsive" id="table_full_laws_list">
+              <table class="table" id="table_laws_list">
+                <tbody id="tbody_laws_list">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <div class="card ">
+          <div class="card-header">
+            <h4 class="card-title">Estatísticas Gerais</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table tablesorter " id="">
+                <tbody>
+                  <tr>
+                    <td>
+                      Primeiro ano com Leis Ordinárias
+                    </td>
+                    <td class="text-center">
+                      1891
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Leis no primeiro ano (ano 1891)
+                    </td>
+                    <td class="text-center">
+                      6
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Último ano (completo) com leis
+                    </td>
+                    <td class="text-center">
+                      2022
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Leis no último ano completo (ano 2022)
+                    </td>
+                    <td class="text-center">
+                      228
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Leis totais de 1891 à 2023 
+                    </td>
+                    <td class="text-center">
+                      13.521 Leis
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Ano com mais Leis
+                    </td>
+                    <td class="text-center">
+                      1956
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Máximo de leis em 1 ano (ano 1956)
+                    </td>
+                    <td class="text-center">
+                      360 leis
+                    </td>
+                  </tr> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% else %}
+  
+{% endif %}
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+  $(document).ready(function() {
+    atualPage = "ordinaria";
+    // Javascript method's body can be found in assets/js/demos.js
+    metaLeg.initChartsConfiguration();
+    metaLeg.initCharts();
+    metaLeg.searchTerm('{{search}}', '{{tipo}}');
+    var listElm = document.getElementById("table_full_laws_list");
+    listElm.addEventListener('scroll', function() {
+      
+      if (listElm.scrollTop + listElm.clientHeight >= (listElm.scrollHeight)) {
+        //disableScroll();
+        metaLeg.listLoadEnd();
+        console.log('loadEnd');
+      }
+      if (listElm.scrollTop  == 0) {
+        metaLeg.listLoadBegin();
+        console.log('loadBegin');
+      }
+      //enableScroll();
+    });
+
+//     const intersectionObserver = new IntersectionObserver(entries => {
+//       console.log(entries[0].intersectionRatio);
+//       //if (entries[0].intersectionRatio <= 0) return;
+//       // load more content;
+//       //loadItems(10);
+//     });
+// // start observing
+//     intersectionObserver.observe(document.getElementById('tbody_end'));
+
+    $("#1851_2023").click(function() {
+      metaLeg.setBigChart(dXY, 1851, 2023);
+    });
+    $("#1851_1988").click(function (){
+      metaLeg.setBigChart(dXY, 1851, 1988);
+    });
+    $("#1989_2023").click(function() {
+      metaLeg.setBigChart(dXY, 1989, 2023);
+    });
+    $("#search_icon").click(function() {
+      searchLeg(search_input.value, 'ordinarias')
+    });
+    document.getElementById('search_input').addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchLeg(search_input.value, 'ordinarias');
+      }
+    }); 
+
+    function searchLeg(search, type){
+      location.search = 'type=' + type + '&search=' + search;
+      metaLeg.searchTerm(search, type);
+    }
+
+  });
+
+</script>
+
+{% endblock javascripts %}
