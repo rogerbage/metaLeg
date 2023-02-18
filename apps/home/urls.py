@@ -18,6 +18,7 @@ urlpatterns = [
     path('getDecreto', views.getDecreto, name='getDecreto'),
     path('getLeg', views.getLeg, name='getLeg'),
     path('cleanDecreto', views.cleanDecreto, name='cleanDecreto'),
+    path('cleanDecretos', views.cleanDecreto, name='cleanDecreto'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
