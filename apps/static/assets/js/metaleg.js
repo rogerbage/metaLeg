@@ -645,6 +645,53 @@ metaLeg = {
       console.log(erro.responseText);
     });
   },
+
+  showOneMetaLeg: function(event, id, type){
+    event.preventDefault();
+    console.log(event, id, type);
+    var action = '/getLeg';
+    var data = {
+      id: id,
+      type: type,
+    };
+    $.ajax({
+      url: action,
+      data: data,
+      type: "get",
+      dataType: "json",
+      beforeSend: function (load) {
+      }
+    })
+    .done(function (su) {
+      if (su.result){
+      var lei = su.result;  
+      console.log(lei.id);
+      console.log(lei.ano);
+      console.log(lei.ementa);
+      var freqs = ferramentas.wordFreq(lei.inteiroTeor);
+      console.log(freqs);
+      let sortable = [];
+      for (var word in freqs) {
+        if (word.length >= 4){
+          sortable.push([word, freqs[word]]);  
+        }
+        
+      }
+
+      sortable.sort(function(a, b) {
+        return a[1] - b[1];
+      });
+      console.log("Palavra mais citada (com mais de 3 letras): ", sortable[sortable.length - 1]);
+      console.log("Total de palavras: ", lei.inteiroTeor.split(" ").length);
+      console.log("Total de caracteres(incluindo espaços)", lei.inteiroTeor.length);
+      
+      }
+    })
+    .fail (function (erro){
+      console.log(erro.responseText);
+    });
+  },
+
     addLawList: function(value, position, type){
     var trId = ferramentas.getStringId(value['lei']);
         
@@ -658,6 +705,9 @@ metaLeg = {
         <td class="td-actions text-right">
           <button type="button" onclick="metaLeg.exportLeg(event, ${value['id']}, '${type}')" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
             <i class="tim-icons icon-cloud-download-93"></i>
+          </button>
+          <button type="button" onclick="metaLeg.showOneMetaLeg(event, ${value['id']}, '${type}')" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+            <i class="fa-solid fa-table-list"></i>
           </button>
         </td>
     `;

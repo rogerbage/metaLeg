@@ -11,6 +11,8 @@ Instruções:
     -  https://drive.google.com/file/d/1zLkAmPo0Bt-jtHH-jSM2XszHbZIuHSOZ/view?usp=share_link
 
  - Execute os comandos:
+    - virtualenv env
+    - . env/bin/activate
     - pip install --upgrade pip
     - pip install --no-cache-dir -r requirements.txt
     - python3 manage.py makemigrations
