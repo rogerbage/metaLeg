@@ -140,11 +140,11 @@ def index(request):
     else:
         tipo = 'decreto'
         search = 'Gás'
-        context = {
+    context = {
             'segment': 'index',
             'tipo': tipo,
             'search': search,
-        }
+    }
     if ('ordinaria' in tipo):
         html_template = loader.get_template('home/leis-ordinarias.html')
         context['segment'] = 'leis-ordinarias'

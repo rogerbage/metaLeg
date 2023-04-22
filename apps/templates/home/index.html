@@ -275,7 +275,8 @@
     $("#1989_2023").click(function() {
       metaLeg.setBigChart(dXY, 1989, 2023);
     });
-    $("#search_icon").click(function() {
+    $("#search_icon").click(function(event) {
+      event.preventDefault();
       searchLeg(search_input.value, 'decreto')
     });
     document.getElementById('search_input').addEventListener("keypress", function(event) {
