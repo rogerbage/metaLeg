@@ -10,19 +10,15 @@ from django.contrib.auth.models import User
 
 
 class Decreto(models.Model):
-	lei = models.TextField()
-	leiClean = models.TextField()
+	id = models.BigAutoField(primary_key=True)
+	lei = models.TextField(256)
 	ano = models.IntegerField()
 	ementa = models.TextField()
-	ementaClean = models.TextField()
 	inteiroTeor = models.TextField()
-	inteiroTeorClean = models.TextField()
 
 class LeiOrdinaria(models.Model):
+	id = models.BigAutoField(primary_key=True)
 	lei = models.TextField()
-	leiClean = models.TextField()
 	ano = models.IntegerField()
 	ementa = models.TextField()
-	ementaClean = models.TextField()
 	inteiroTeor = models.TextField()
-	inteiroTeorClean = models.TextField()

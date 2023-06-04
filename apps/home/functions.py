@@ -20,10 +20,10 @@ def returnLeg(tipo, search):
     searchClean = unidecode(search).lower()
     logging.warning(search)
     if (tipo == 'ordinaria'):
-        filterDecretos = LeiOrdinaria.objects.filter(inteiroTeorClean__icontains=searchClean).order_by('ano', 'lei')
+        filterDecretos = LeiOrdinaria.objects.filter(inteiroTeor__icontains=searchClean).order_by('ano', 'lei')
     else:
         #filterDecretos = Decreto.objects.filter(Q(inteiroTeor__icontains=search) | Q(inteiroTeor__icontains=searchClean)).order_by('ano', 'lei')
-        filterDecretos = Decreto.objects.filter(inteiroTeorClean__icontains=searchClean).order_by('ano', 'lei')
+        filterDecretos = Decreto.objects.filter(inteiroTeor__icontains=searchClean).order_by('ano', 'lei')
     
     contador = {}
     laws = {}

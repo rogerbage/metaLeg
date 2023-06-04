@@ -22,7 +22,7 @@ from .models import Decreto, LeiOrdinaria
 
 def api(request):
     search = request.GET['search']
-    searchClean = unidecode(search).lower()
+    # searchClean = unidecode(search).lower()
     logging.warning('api')
     return returnLeg(request.GET['type'], request.GET['search'])
     
