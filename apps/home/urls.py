@@ -19,6 +19,7 @@ urlpatterns = [
     path('getLeg', views.getLeg, name='getLeg'),
     path('cleanDecreto', views.cleanDecreto, name='cleanDecreto'),
     path('cleanDecretos', views.cleanDecreto, name='cleanDecreto'),
+    path('embeddingDecretos', views.embeddingDecretos, name='embeddingDecretos'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 

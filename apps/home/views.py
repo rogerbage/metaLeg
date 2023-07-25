@@ -13,18 +13,16 @@ import logging
 import pandas as pd
 import glob
 from unidecode import unidecode
-from .functions import returnLeg
+from .functions import returnLeg, embbedingDecreto
 from .models import Decreto, LeiOrdinaria
+from libs.MetaLeg.MetaLeg import MetaLeg
 
 @login_required(login_url="/login/")
-
-
-
 def api(request):
     search = request.GET['search']
     # searchClean = unidecode(search).lower()
     logging.warning('api')
-    return returnLeg(request.GET['type'], request.GET['search'])
+    return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
     
 
 @login_required(login_url="/login/")
@@ -40,6 +38,7 @@ def getDecreto(request):
         result['ementa'] = decreto.ementa
         result['inteiroTeor'] = decreto.inteiroTeor
     return JsonResponse({'search': id, 'result': result})
+
 
 @login_required(login_url="/login/")
 def getLeg(request):
@@ -68,6 +67,12 @@ def cleanDecreto(request):
         row.ementaClean = unidecode(row.ementa).lower()
         row.inteiroTeorClean = unidecode(row.inteiroTeor).lower()
         row.save()
+    return JsonResponse({'response': 'ok'})
+
+
+def indexDecreto(request):
+    for row in Decreto.objects.all():
+        resposta = "ok"
     return JsonResponse({'response': 'ok'})
 
 def cleanOrdinarias(request):
@@ -130,6 +135,17 @@ def updateOrdinarias(request):
     context = {'segment': 'index'}
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
+
+@login_required(login_url="/login/")
+def embeddingDecretos(request):
+    ano = 1862
+    while ano <= 2023:
+        decretos = Decreto.objects.filter(ano=ano).order_by('id')
+        metaLeg = MetaLeg()
+       
+        metaLeg.embbedingEmentas(decretos, ano)
+        ano += 1
+    return JsonResponse({'response': 'ok'})
 
 
 @login_required(login_url="/login/")
