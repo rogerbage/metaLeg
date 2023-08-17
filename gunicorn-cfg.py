@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 bind = 'rogerbage.vps-kinghost.net:80'
+=======
+bind = 'rogerbage.vps-kinghost.net'
+>>>>>>> a7b7fdf877cfaf0e379ce4cf73be6630e7ac94d3
 workers = 1
 accesslog = '-'
 loglevel = 'debug'
