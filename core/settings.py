@@ -29,11 +29,9 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
-<<<<<<< HEAD
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '187.111.37.245', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
-=======
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '189.126.111.5', '187.111.37.245', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
->>>>>>> a7b7fdf877cfaf0e379ce4cf73be6630e7ac94d3
+
 
 # Application definition
 
@@ -100,25 +98,6 @@ DATABASES = {
         'PORT'    : os.getenv('DB_PORT'     , 3306),
         }, 
     }
-
-# if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
-#     DATABASES = { 
-#       'default': {
-#         'ENGINE'  : 'django.db.backends.mysql', 
-#         'NAME'    : os.getenv('DB_NAME'     , 'metaleg'),
-#         'USER'    : os.getenv('DB_USERNAME' , 'rogerbage'),
-#         'PASSWORD': os.getenv('DB_PASS'     , 'N0v4@S3nh4'),
-#         'HOST'    : os.getenv('DB_HOST'     , 'localhost'),
-#         'PORT'    : os.getenv('DB_PORT'     , 3306),
-#         }, 
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': 'db.sqlite3',
-#         }
-#     }
 
 
 # Password validation
