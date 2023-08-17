@@ -1,4 +1,4 @@
-bind = '127.0.0.1:8000'
+bind = '0.0.0.0:5005'
 workers = 1
 accesslog = '-'
 loglevel = 'debug'
