@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '189.126.111.5', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '189.126.111.5', '187.111.37.245', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
 
 # Application definition
 
@@ -90,9 +90,9 @@ DATABASES = {
       'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
         'NAME'    : os.getenv('DB_NAME'     , 'meta_leg'),
-        'USER'    : os.getenv('DB_USERNAME' , 'rogerbage'),
-        'PASSWORD': os.getenv('DB_PASS'     , 'N0v4@S3nh4'),
-        'HOST'    : os.getenv('DB_HOST'     , 'localhost'),
+        'USER'    : os.getenv('DB_USERNAME' , 'metaleg'),
+        'PASSWORD': os.getenv('DB_PASS'     , 'Ultr4@S3nh4'),
+        'HOST'    : os.getenv('DB_HOST'     , '189.126.111.5'),
         'PORT'    : os.getenv('DB_PORT'     , 3306),
         }, 
     }
