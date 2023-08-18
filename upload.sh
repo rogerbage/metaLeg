@@ -1,2 +1,2 @@
 #!/bin/sh
-rsync -av  ./ rogerbage@189.126.111.5:/home/rogerbage/dev/metaLeg/
+rsync -av --exclude .git/ --exclude env/ --exclude .env --exclude .vscode  ./ rogerbage@rogerbage.vps-kinghost.net:/home/rogerbage/metaLeg/

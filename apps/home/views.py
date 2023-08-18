@@ -20,9 +20,10 @@ from libs.MetaLeg.MetaLeg import MetaLeg
 @login_required(login_url="/login/")
 def api(request):
     search = request.GET['search']
-    # searchClean = unidecode(search).lower()
+    searchClean = unidecode(search).lower()
     logging.warning('api')
-    return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
+    # return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
+    return returnLeg(request.GET['type'], searchClean)
     
 
 @login_required(login_url="/login/")
@@ -93,7 +94,7 @@ def updateDecretos(request):
         for f in df.itertuples():
             decreto = Decreto.objects.filter(lei=f.lei).first()
             if (not decreto): 
-                decreto = Decreto(lei=f.lei)   
+                decreto = Decreto(lei=f.lei)  
                 decreto.ano = f.ano 
                 decreto.lei = f.lei 
                 decreto.ementa = f.ementa 
