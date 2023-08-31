@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(rogerbage.vps-kinghost.net www.rogerbage.vps-kinghos.net)
+domains=(rogerbage.vps-kinghost.net www.rogerbage.vps-kinghost.net)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="correiodoroger@gmail.com" # Adding a valid address is strongly recommended

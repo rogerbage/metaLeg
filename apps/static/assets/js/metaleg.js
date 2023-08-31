@@ -505,6 +505,7 @@ metaLeg = {
 
   },
 	searchTerm: function(search, type){
+    console.log("SearchTemr");
     document.getElementById('search_loading').style.display = "inline-block";
     var action = '/api';
     var data = {
@@ -521,6 +522,7 @@ metaLeg = {
       }
     })
     .done(function (su) {
+      console.log("done: ", su);
       if (su.contador){
         metaLeg.setCharts(su);  
       }

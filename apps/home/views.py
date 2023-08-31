@@ -20,10 +20,10 @@ from libs.MetaLeg.MetaLeg import MetaLeg
 @login_required(login_url="/login/")
 def api(request):
     search = request.GET['search']
-    searchClean = unidecode(search).lower()
+    #searchClean = unidecode(search).lower()
     logging.warning('api')
     # return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
-    return returnLeg(request.GET['type'], searchClean)
+    return returnLeg(request.GET['type'], search)
     
 
 @login_required(login_url="/login/")

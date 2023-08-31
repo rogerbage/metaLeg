@@ -7,16 +7,20 @@ import os
 from decouple import config
 from unipath import Path
 import pymysql
+from dotenv import load_dotenv
 
 pymysql.install_as_MySQLdb()
-# import os, environ
+# import environ
 
 # env = environ.Env(
 #     # set casting, default value
 #     DEBUG=(bool, True)
 # )
-DB_ENGINE='mysql'
+# DB_ENGINE='mysql'
 
+
+dotenv_path = Path('./.env')
+load_dotenv(dotenv_path=dotenv_path)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
@@ -91,11 +95,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = { 
       'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : os.getenv('DB_NAME'     , 'meta_leg'),
-        'USER'    : os.getenv('DB_USERNAME' , 'metaleg'),
-        'PASSWORD': os.getenv('DB_PASS'     , 'Ultr4@S3nh4'),
-        'HOST'    : os.getenv('DB_HOST'     , '189.126.111.5'),
-        'PORT'    : os.getenv('DB_PORT'     , 3306),
+        'NAME'    : os.getenv('DB_NAME'),
+        'USER'    : os.getenv('DB_USERNAME'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST'    : os.getenv('DB_HOST'),
+        'PORT'    : os.getenv('DB_PORT'),
         }, 
     }
 
