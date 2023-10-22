@@ -8,6 +8,7 @@ from unidecode import unidecode
 from apps.home.models import Decreto, LeiOrdinaria
 import logging
 from django.http import JsonResponse
+from .chat import chat
 
 
 

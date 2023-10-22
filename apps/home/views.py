@@ -16,6 +16,8 @@ from unidecode import unidecode
 from .functions import returnLeg, embbedingDecreto
 from .models import Decreto, LeiOrdinaria
 from libs.MetaLeg.MetaLeg import MetaLeg
+from libs.MetaLeg.chat import chat
+import json
 
 @login_required(login_url="/login/")
 def api(request):
@@ -26,6 +28,44 @@ def api(request):
         return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
     return returnLeg(request.GET['type'], search)
     
+@login_required(login_url="/login/")
+def getSummary(request):
+    id = request.GET['id']
+    decreto = Decreto.objects.filter(id=id).first()
+    result = {}
+    if (decreto.lei):
+        logging.warning(decreto.lei)
+        result['id'] =  decreto.id
+        result['ano'] = decreto.ano
+        result['lei'] = decreto.lei
+        result['ementa'] = decreto.ementa
+        result['inteiroTeor'] = decreto.inteiroTeor
+
+        lei = {
+            'ano': decreto.ano,
+            'lei': decreto.lei,
+            'ementa': decreto.ementa,
+            'intiero_teor': decreto.inteiroTeor
+        }
+
+        prompt = (
+            f"Faça um resumo com até 256 palavras sobre a lei brasileira abaixo: \n"
+            f"/////\n"
+            f"Lei: \n"
+            f"```\n"
+            f"{json.dumps(lei)}\n"
+            f"```\n"
+            f"/////"
+        )
+
+        resposta = chat.basicOpenai(prompt)
+
+        result['resumo'] = resposta
+
+    return JsonResponse({'search': id, 'result': result})
+
+
+
 
 @login_required(login_url="/login/")
 def getDecreto(request):
@@ -39,6 +79,7 @@ def getDecreto(request):
         result['lei'] = decreto.lei
         result['ementa'] = decreto.ementa
         result['inteiroTeor'] = decreto.inteiroTeor
+
     return JsonResponse({'search': id, 'result': result})
 
 

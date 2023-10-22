@@ -17,6 +17,7 @@ urlpatterns = [
     path('cleanOrdinarias', views.cleanOrdinarias, name='cleanOrdinarias'),
     path('getDecreto', views.getDecreto, name='getDecreto'),
     path('getLeg', views.getLeg, name='getLeg'),
+    path('getSummary', views.getSummary, name='getSummary'),
     path('cleanDecreto', views.cleanDecreto, name='cleanDecreto'),
     path('cleanDecretos', views.cleanDecreto, name='cleanDecreto'),
     path('embeddingDecretos', views.embeddingDecretos, name='embeddingDecretos'),

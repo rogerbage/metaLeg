@@ -625,21 +625,75 @@ metaLeg = {
     })
     .done(function (su) {
       if (su.result){
+        modal_subtitle.innerText = "";
         modalBody.innerText = "Por favor aguarde";
-          modalTitle.innerText = "Carregando";
-          modalEmenta.innerText = "";
+        modalTitle.innerText = "Carregando";
+        modalEmenta.innerText = "";
         $("#modal").modal();
-        
+        modalBody.innerText = su.result['inteiroTeor'];
+        modalTitle.innerText = su.result['lei'];
+        modalEmenta.innerText = su.result['ementa'];
+          
+        let modal_buttons= `
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          <button type="button" onclick="metaLeg.generateSummary(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Gerar Resumo IA</button>
+          <button type="button" onclick="metaLeg.exportLeg(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Baixar PDF</button>`;
+
+        modal_header.innerHTML = modal_buttons;
+        modalFooter.innerHTML  = modal_buttons;
+
         $('#modal').on('shown.bs.modal', function () {
-          modalBody.innerText = su.result['inteiroTeor'];
-          modalTitle.innerText = su.result['lei'];
-          modalEmenta.innerText = su.result['ementa'];
-          modalFooter.innerHTML = `
-          	<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-            <button type="button" onclick="metaLeg.exportLeg(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Baixar PDF</button>`;
+          
           //decretoSelecionadoId = su.result['id'];
           document.getElementById('modalTitle').scrollIntoView();
         })
+        
+
+      }
+    })
+    .fail (function (erro){
+      console.log(erro.responseText);
+    });
+  },
+
+  generateSummary: function(event, id, type){
+    event.preventDefault();
+    var action = '/getSummary';
+    var data = {
+      id: id,
+      type: type,
+    };
+    $.ajax({
+      url: action,
+      data: data,
+      type: "get",
+      dataType: "json",
+      beforeSend: function (load) {
+        modalBody.innerText = "Por favor aguarde";
+          modalTitle.innerText = "Carregando";
+          modalEmenta.innerText = "";
+      }
+    })
+    .done(function (su) {
+      console.log(su);
+      if (su.result){
+        
+        // $("#modal").modal();
+        
+          modal_subtitle.innerText = "RESUMO";
+          modalBody.innerText = su.result['resumo'];
+          modalTitle.innerText = su.result['lei'];
+          modalEmenta.innerText = su.result['ementa'];
+
+          let modal_buttons= `
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            <button type="button" onclick="metaLeg.openModal(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Lei Completa</button>`;
+
+          modal_header.innerHTML = modal_buttons;
+          modalFooter.innerHTML  = modal_buttons;
+
+          document.getElementById('modalTitle').scrollIntoView();
+        
         
 
       }
