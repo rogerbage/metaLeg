@@ -504,12 +504,13 @@ metaLeg = {
     document.getElementById('d_total_search').innerText = su.search;
 
   },
-	searchTerm: function(search, type){
+	searchTerm: function(search, type, semantic){
     console.log("SearchTemr");
     document.getElementById('search_loading').style.display = "inline-block";
     var action = '/api';
     var data = {
       type: type,
+      semantic: semantic,
       search: search
     };
     $.ajax({

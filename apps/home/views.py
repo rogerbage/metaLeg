@@ -22,7 +22,8 @@ def api(request):
     search = request.GET['search']
     #searchClean = unidecode(search).lower()
     logging.warning('api')
-    # return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
+    if(request.GET['semantic'] == 'true'):
+        return MetaLeg.returnLegSemantic(request.GET['type'], request.GET['search'])
     return returnLeg(request.GET['type'], search)
     
 

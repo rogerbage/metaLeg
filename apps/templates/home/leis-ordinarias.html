@@ -24,7 +24,25 @@
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
-                  <label>Pesquisar Termo</label>
+                  <table class="table" style="width: 200px; height: 30px;">
+                  <tbody>
+                    <tr>
+                      <td style="padding: 0;">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" id="semantic_search_checkbox" type="checkbox" value="">
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </td>
+                      <td style="padding: 0;">
+                        <p class="title">Busca Semântica</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
                   <span class="input-group-text text-body form-control">
                    <div id="search_loading" class="lds-dual-ring"></div>
                     <input id="search_input" type="text" style="border: none;" class="form-control" placeholder="Pesquisar Termo" value="{{search}}">
@@ -217,6 +235,37 @@
       </div>
     </div>
 
+
+    <div class="modal fade" id="semantic_search_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="margin-top: -150px;">
+    <div class="modal-content" style="height: 70vh;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="edit_rule_title">Busca semântica por ementa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="height: 100%;">
+              <div class="col-md-12">
+                <div class="form-group" style="height: 100%;">
+                  <div class="form-group"  style="height: 100%;">
+                    <!-- <label class="bmd-label-floating"> Adicione instruções e regras para este componente.</label> -->
+                    <textarea id="semantic_search_textarea" class="form-control" style="height: 100%; color: #000;" rows="10"></textarea>
+                    <input type="hidden" id="edit_rule_component_id"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" id="semantic_search_button" class="btn btn-primary">Pesquisar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% else %}
   
 {% endif %}
@@ -229,34 +278,25 @@
 
 <script>
   $(document).ready(function() {
-    atualPage = "ordinaria";
+    let semantic_search_checkbox = document.getElementById('semantic_search_checkbox');
+    let search_input = document.getElementById('search_input');
+    let semantic_search_button = document.getElementById('semantic_search_button');
+    let semantic_search_textarea = document.getElementById('semantic_search_textarea');
+    atualPage = 'ordinaria'
     // Javascript method's body can be found in assets/js/demos.js
     metaLeg.initChartsConfiguration();
     metaLeg.initCharts();
-    metaLeg.searchTerm('{{search}}', '{{tipo}}');
+    metaLeg.searchTerm("{{search}}", "{{tipo}}", semantic_search_checkbox.checked);
     var listElm = document.getElementById("table_full_laws_list");
     listElm.addEventListener('scroll', function() {
       
       if (listElm.scrollTop + listElm.clientHeight >= (listElm.scrollHeight)) {
-        //disableScroll();
         metaLeg.listLoadEnd();
-        console.log('loadEnd');
       }
       if (listElm.scrollTop  == 0) {
         metaLeg.listLoadBegin();
-        console.log('loadBegin');
       }
-      //enableScroll();
     });
-
-//     const intersectionObserver = new IntersectionObserver(entries => {
-//       console.log(entries[0].intersectionRatio);
-//       //if (entries[0].intersectionRatio <= 0) return;
-//       // load more content;
-//       //loadItems(10);
-//     });
-// // start observing
-//     intersectionObserver.observe(document.getElementById('tbody_end'));
 
     $("#1851_2023").click(function() {
       metaLeg.setBigChart(dXY, 1851, 2023);
@@ -267,19 +307,47 @@
     $("#1989_2023").click(function() {
       metaLeg.setBigChart(dXY, 1989, 2023);
     });
-    $("#search_icon").click(function() {
-      searchLeg(search_input.value, 'ordinarias')
+    $("#search_icon").click(function(event) {
+      event.preventDefault();
+      searchLeg(search_input.value, 'ordinaria', semantic_search_checkbox.checked);
     });
-    document.getElementById('search_input').addEventListener("keypress", function(event) {
+
+
+    
+
+    search_input.addEventListener("keypress", function(event) {
       if (event.key === "Enter") {
         event.preventDefault();
-        searchLeg(search_input.value, 'ordinarias');
+        searchLeg(search_input.value, 'ordinaria', semantic_search_checkbox.checked);
       }
     }); 
 
-    function searchLeg(search, type){
-      location.search = 'type=' + type + '&search=' + search;
-      metaLeg.searchTerm(search, type);
+    search_input.addEventListener("click", function(event) {
+      if(semantic_search_checkbox.checked){
+        $('#semantic_search_modal').modal();
+      }
+    }); 
+
+    semantic_search_button.onclick = function (event){
+      event.preventDefault();
+      search_input.value = semantic_search_textarea.value;
+      searchLeg(search_input.value, 'ordinaria', semantic_search_checkbox.checked);
+      $("#semantic_search_modal").modal('hide');
+    };
+    
+
+    semantic_search_checkbox.onclick = function (event){
+      console.log("aui");
+      if (semantic_search_checkbox.checked == true){
+        $('#semantic_search_modal').modal();
+      }
+    };
+
+
+    function searchLeg(search, type, semantic){
+      url= 'type=' + type + '&semantic=' + semantic + '&search=' + search;
+      window.history.replaceState(null, null, url);
+      metaLeg.searchTerm(search, 'ordinaria', semantic);
     }
 
   });

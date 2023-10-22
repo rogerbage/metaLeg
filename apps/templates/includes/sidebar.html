@@ -17,13 +17,13 @@
         {% if request.user.is_authenticated %}
 
           <li class="{% if 'index' in segment %} active {% endif %}">
-            <a href="/?type=decreto&search={{search}}">
+            <a href="/?type=decreto&semantic=false&search={{search}}">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Decretos Presidenciais</p>
             </a>
           </li>
           <li class="{% if 'leis-ordinarias' in segment %} active {% endif %}">
-            <a href="/?type=ordinaria&search={{search}}">
+            <a href="/?type=ordinaria&semantic=false&search={{search}}">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Leis Ordinárias</p>
             </a>

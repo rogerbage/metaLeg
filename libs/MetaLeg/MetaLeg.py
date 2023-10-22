@@ -172,7 +172,7 @@ class MetaLeg:
         print(melhores)
 
         if (tipo == 'ordinaria'):
-            Blog.objects.filter(pk__in=[1, 4, 7])
+            # Blog.objects.filter(pk__in=[1, 4, 7])
             filterDecretos = LeiOrdinaria.objects.filter(id__in=melhores).order_by('ano', 'lei')
         else:
             #filterDecretos = Decreto.objects.filter(Q(inteiroTeor__icontains=search) | Q(inteiroTeor__icontains=searchClean)).order_by('ano', 'lei')
