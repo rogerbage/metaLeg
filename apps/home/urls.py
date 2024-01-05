@@ -21,6 +21,8 @@ urlpatterns = [
     path('cleanDecreto', views.cleanDecreto, name='cleanDecreto'),
     path('cleanDecretos', views.cleanDecreto, name='cleanDecreto'),
     path('embeddingDecretos', views.embeddingDecretos, name='embeddingDecretos'),
+    path('embeddingOrdinarias', views.embeddingOrdinarias, name='embeddingOrdinarias'),
+
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 

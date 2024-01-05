@@ -34,7 +34,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
 
-ALLOWED_HOSTS = [ '127.0.0.1', '189.126.111.5', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = [ '127.0.0.1', '189.126.111.5', '192.168.88.72', 'rogerbage.vps-kinghost.net', config('SERVER', default='127.0.0.1')]
 
 
 # Application definition

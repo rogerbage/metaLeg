@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 
 class Decreto(models.Model):
 	id = models.BigAutoField(primary_key=True)
-	lei = models.TextField(256)
+	lei = models.TextField()
 	ano = models.IntegerField()
 	ementa = models.TextField()
 	inteiroTeor = models.TextField()

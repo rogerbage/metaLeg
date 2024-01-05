@@ -190,6 +190,17 @@ def embeddingDecretos(request):
         ano += 1
     return JsonResponse({'response': 'ok'})
 
+@login_required(login_url="/login/")
+def embeddingOrdinarias(request):
+    ano = 1862
+    while ano <= 2023:
+        ordinarias = LeiOrdinaria.objects.filter(ano=ano).order_by('id')
+        metaLeg = MetaLeg()
+       
+        metaLeg.embbedingEmentasOrdinarias(ordinarias, ano)
+        ano += 1
+    return JsonResponse({'response': 'ok'})
+
 
 @login_required(login_url="/login/")
 def index(request):

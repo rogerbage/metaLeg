@@ -114,6 +114,18 @@ class MetaLeg:
             sentence_json = json.dumps(decretosAno)
             destination.write(sentence_json)
 
+    def embbedingEmentasOrdinarias(self, ordinarias, ano):
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+        url = f"./apps/data/transformers/ordinarias/ementas/ementa_{ano}.json"
+        os.makedirs(os.path.dirname(url), exist_ok=True)
+        ordinariasAno = {}
+        for ordinaria in ordinarias:
+            ordinariasAno[ordinaria.id] = model.encode(ordinaria.ementa, convert_to_numpy=True).tolist()
+                                
+        with open(url, 'w') as destination:
+            sentence_json = json.dumps(ordinariasAno)
+            destination.write(sentence_json)
+
     def embbedingDecreto(self, ementas, ano):
         model = SentenceTransformer('all-MiniLM-L6-v2')
         # url = f"./apps/data/transformers/decretos/{decreto.ano}/ementas/decreto_{decreto.id}.json"
@@ -150,6 +162,9 @@ class MetaLeg:
         model = SentenceTransformer('all-MiniLM-L6-v2')
         searchEmbedding = model.encode([search], convert_to_numpy=True)
         indexUrl = './apps/data/transformers/decretos/ementas/'
+        if (tipo == 'ordinaria'):
+            print("Tipo Oridnária!!!")
+            indexUrl = './apps/data/transformers/ordinarias/ementas/'
         allFiles = [f for f in os.listdir(indexUrl) if os.path.isfile(os.path.join(indexUrl, f))]
         melhores = []
         for fileName in allFiles:
@@ -157,18 +172,19 @@ class MetaLeg:
             with open(url, 'r') as fileIndex:
                 loadIndexes = json.loads(fileIndex.read())
 
-            indexes = []
-            indexesKeys = []
-            for loadIndex in loadIndexes:
-                
-                indexes.append(torch.FloatTensor(loadIndexes[loadIndex]))
-                indexesKeys.append(loadIndex)
+            if(len(loadIndexes) > 0):
 
-            todas = util.semantic_search(searchEmbedding, indexes , top_k=10)[0]
-            for cada in todas:
-                print("score: ", cada['score'])
-                if (cada['score'] > 0.7):
-                    melhores.append(indexesKeys[cada['corpus_id']])
+                indexes = []
+                indexesKeys = []
+                for loadIndex in loadIndexes:
+                    indexes.append(torch.FloatTensor(loadIndexes[loadIndex]))
+                    indexesKeys.append(loadIndex)
+
+                todas = util.semantic_search(searchEmbedding, indexes , top_k=10)[0]
+                for cada in todas:
+                    print("score: ", cada['score'])
+                    if (cada['score'] > 0.7):
+                        melhores.append(indexesKeys[cada['corpus_id']])
 
         print(melhores)
 

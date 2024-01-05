@@ -8,6 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os, json, re
 from PyPDF2 import PdfReader
 
+from django.template import loader
 
 
 def conta_matches(df, search): 
@@ -22,16 +23,18 @@ def conta_matches(df, search):
 
 def returnLeg(tipo, search):
     searchClean = unidecode(search).lower()
-    logging.warning(search)
+    logging.warning(searchClean)
     if (tipo == 'ordinaria'):
         filterDecretos = LeiOrdinaria.objects.filter(inteiroTeor__icontains=searchClean).order_by('ano', 'lei')
     else:
+        logging.warning("DECRETO")
         #filterDecretos = Decreto.objects.filter(Q(inteiroTeor__icontains=search) | Q(inteiroTeor__icontains=searchClean)).order_by('ano', 'lei')
         filterDecretos = Decreto.objects.filter(inteiroTeor__icontains=searchClean).order_by('ano', 'lei')
     
     contador = {}
     laws = {}
     for d in filterDecretos:
+        logging.warning('aqui')
         if (not d.ano in contador):
             contador[d.ano] = 1
         else:
@@ -49,7 +52,17 @@ def returnLeg(tipo, search):
 
     return JsonResponse({'search': search, 'laws': laws, 'type': tipo, 'contador': contador})
 
-
+##################################################################
+def loadTemplate(templateUrl, context ):
+    try:
+        html_template = loader.render_to_string(templateUrl, context)
+        return(html_template)
+    except Exception as inst:
+        print(type(inst))    
+        print(inst.args)     
+        print(inst)
+        return(inst)
+###################################################################
 
 def returnFullText(file):
     reader = PdfReader("./apps/data/user_uploads/" + file)

@@ -637,6 +637,7 @@ metaLeg = {
         let modal_buttons= `
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
           <button type="button" onclick="metaLeg.generateSummary(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Gerar Resumo IA</button>
+          <button type="button" onclick="metaLeg.openChatLei(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Chat Lei</button>
           <button type="button" onclick="metaLeg.exportLeg(event, ${su.result['id']}, '${su.type}')" class="btn btn-primary">Baixar PDF</button>`;
 
         modal_header.innerHTML = modal_buttons;
